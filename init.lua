@@ -75,6 +75,12 @@ plugins = {
   },
 },
 {
+  "ms-jpq/coq.artifacts",
+  branch = "artifacts",
+  priority = 100,
+  lazy = false,
+},
+{
   'neovim/nvim-lspconfig',
   lazy = false,
   dependencies = {
@@ -123,9 +129,18 @@ end
 }
 }
 
-vim.g.coq_settings = {
-  auto_start = "shut-up" 
-}
+local compiled = false
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    if not compiled then
+      vim.defer_fn(function()
+        pcall(vim.cmd, "COQ snips compile")
+        compiled = true
+      end, 200)
+    end
+  end,
+})
 
 require("lazy").setup(plugins)
 
