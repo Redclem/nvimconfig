@@ -1,7 +1,5 @@
 local lspconfig = vim.lsp.config
 
-local blink_cmp = require('blink.cmp')
-
 vim.lsp.enable("clangd")
 vim.lsp.enable("ocamllsp")
 vim.lsp.enable("pyright")
