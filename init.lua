@@ -67,7 +67,6 @@ plugins = {
   lazy = false,
   init = function()
     vim.g.coq_settings = {
-      auto_start = "shut-up", -- starts silently without popup notices
     }
     end,
   dependencies = {
@@ -97,15 +96,9 @@ plugins = {
   init = function()
     vim.g.coq_settings = {
         -- Your COQ settings here
-      auto_start = "shut-up", -- starts silently without popup notices
     }
   end,
   config = function(_, opts)
-    coq = require('coq')
-    for server, config in pairs(opts.servers) do
-      config = coq.lsp_ensure_capabilities(config.capabilities)
-      vim.lsp.config(server, config)
-    end
   end,
 
   -- example using `opts` for defining servers
