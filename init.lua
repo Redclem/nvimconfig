@@ -226,4 +226,4 @@ require("origami").setup {
 
 require("cfg_bl")
 require("cfg_lsp")
-
+require("cfg_snip")
