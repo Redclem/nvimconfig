@@ -115,7 +115,17 @@ plugins = {
     }
   },
 },
-{"nvim-treesitter/nvim-treesitter"},
+{
+  "nvim-treesitter/nvim-treesitter",
+  config = function()
+  require("nvim-treesitter.configs").setup({
+      indent = {
+      enable = true,
+      disable = { "c", "cpp" }, -- Delegate indenting back to cindent
+    },
+  })
+  end
+},
 {
 	"geg2102/nvim-python-repl",
 	dependencies = "nvim-treesitter",
