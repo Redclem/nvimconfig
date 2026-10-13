@@ -13,6 +13,16 @@ vim.o.shiftwidth = 2
 vim.o.expandtab = true
 vim.o.smartindent = true
 
+local coq_settings = {
+  clients = {
+    buffers = {
+      enabled = false, -- Disables BF / text suggestions
+    },
+  },
+}
+
+vim.g.coq_settings = coq_settings
+
 require("config.lazy")
 
 plugins = {
@@ -66,8 +76,7 @@ plugins = {
   branch = "coq",
   lazy = false,
   init = function()
-    vim.g.coq_settings = {
-    }
+    vim.g.coq_settings = coq_settings
     end,
   dependencies = {
     { "ms-jpq/coq.artifacts", branch = "artifacts" },
@@ -100,9 +109,7 @@ plugins = {
     -- - etc
   },
   init = function()
-    vim.g.coq_settings = {
-        -- Your COQ settings here
-    }
+    vim.g.coq_settings = coq_settings
   end,
   config = function(_, opts)
   end,
@@ -118,11 +125,15 @@ plugins = {
 {
   "nvim-treesitter/nvim-treesitter",
   config = function()
-  require("nvim-treesitter.configs").setup({
+  require("nvim-treesitter.config").setup({
       indent = {
       enable = true,
       disable = { "c", "cpp" }, -- Delegate indenting back to cindent
-    },
+      },
+      ensure_installed = { "markdown", "markdown_inline", "lua", "vim", "vimdoc", "query" },
+      sync_install=false,
+      auto_install=true,
+      highlight={enable=true},
   })
   end
 },
@@ -164,12 +175,7 @@ require("lualine").setup({
 	}
 })
 
-require("nvim-treesitter.configs").setup({
-	ensure_installed = { "c", "lua", "vim", "vimdoc", "query" },
-	sync_install=false,
-	auto_install=true,
-	highlight={enable=true},
-	indent={enable=true},
+require("nvim-treesitter.config").setup({
 })
 
 opt.foldmethod="expr"
