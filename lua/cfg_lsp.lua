@@ -8,7 +8,7 @@ vim.lsp.enable("glslls")
 
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
-  callback = function()
+  callback = function(args)
     local bufmap = function(mode, lhs, rhs)
       local opts = {buffer = true}
       vim.keymap.set(mode, lhs, rhs, opts)
@@ -49,6 +49,20 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     -- Move to the next diagnostic
     bufmap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
+
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client and client.name == "clangd" then
+      -- Enable format-on-type if clangd advertises the capability
+      if client.server_capabilities.documentOnTypeFormattingProvider then
+        vim.api.nvim_create_autocmd("TextChangedI", {
+          buffer = args.buf,
+          callback = function()
+            -- Optional: check if last typed character is a trigger (e.g., ";", "}")
+            -- vim.lsp.buf.format({ async = true })
+          end,
+        })
+      end
+    end
   end
 })
 

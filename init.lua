@@ -118,7 +118,14 @@ plugins = {
   opts = {
     servers = {
       lua_ls = {},
-	  clangd = {}
+	  clangd = {
+        cmd = {
+          "clangd",
+          "--background-index",
+          "--clang-tidy",
+          "--fallback-style=file:" .. vim.fn.stdpath("config") .. "/.clang-format", 
+        }
+      }
     }
   },
 },
@@ -147,6 +154,31 @@ plugins = {
 	    vsplit = false,
 	})
 end
+},
+{
+  'stevearc/conform.nvim',
+  event = { "BufWritePre" },
+  cmd = { "ConformInfo" },
+  opts = {
+    formatters_by_ft = {
+      lua = { "stylua" },
+      -- Conform will run multiple formatters sequentially
+      cpp = { "clang-format" },
+    },
+    format_on_save = {
+      -- These options will be passed to conform.format()
+      timeout_ms = 500,
+      },
+    default_format_opts = {
+      lsp_format = "fallback",
+    },
+    formatters = {
+      ["clang-format"] = {
+        -- Use append_args to add to the default arguments
+        append_args = {"--style=file:" .. vim.fn.stdpath("config") .. "/.clang-format"},
+      },
+    },
+  },
 }
 }
 
@@ -229,6 +261,7 @@ require("origami").setup {
 		hOnlyOpensOnFirstColumn = false,
 	},
 }
+
 
 require("cfg_bl")
 require("cfg_lsp")
